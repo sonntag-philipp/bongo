@@ -1,8 +1,10 @@
-import { supabase } from '$lib/supabase-client';
+import { getSupabaseClient } from '$lib/supabase-client';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const presetId = params['boardId'];
+
+	const supabase = getSupabaseClient();
 
 	const { data: presetData, error: presetError } = await supabase
 		.from('presets')
