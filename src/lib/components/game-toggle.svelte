@@ -8,7 +8,7 @@
 
 	function calculateFontSize(text: string): string {
 		if (text.length >= 50) {
-			return 'text-sm';
+			return 'text-xs';
 		}
 		return 'text-xl';
 	}
