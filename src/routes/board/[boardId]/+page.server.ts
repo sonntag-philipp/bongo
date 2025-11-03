@@ -4,17 +4,39 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params }) => {
 	const presetId = params['boardId'];
 
+	const { data: presetData, error: presetError } = await supabase
+		.from('presets')
+		.select('name')
+		.eq('id', presetId);
+
+	if (!presetData || presetData?.length <= 0) {
+		throw new Error(`Preset not found (Id: "${presetId}")`);
+	}
+
+	if (presetError) {
+		throw new Error('Error loading preset items:', {
+			cause: presetError
+		});
+	}
+
 	const { data, error } = await supabase
 		.from('preset_items')
 		.select('*')
 		.filter('preset_id', 'eq', presetId);
 
 	if (error) {
-		console.error('Error loading instruments:', error.message);
-		return { presetItems: [] };
+		throw new Error('Error loading preset items:', {
+			cause: error.message
+		});
 	}
 
+	const shuffledPresets = data
+		.map((value) => ({ value, sort: Math.random() }))
+		.sort((a, b) => a.sort - b.sort)
+		.map(({ value }) => value);
+
 	return {
-		presetItems: data ?? []
+		presetItems: shuffledPresets,
+		preset: presetData
 	};
 };
