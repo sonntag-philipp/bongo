@@ -6,6 +6,13 @@
 	let { name, description } = $props();
 	let collisionBoundary = $state<HTMLElement | null>(null);
 
+	function calculateFontSize(text: string): string {
+		if (text.length >= 50) {
+			return 'text-sm';
+		}
+		return 'text-xl';
+	}
+
 	onMount(() => {
 		collisionBoundary = document.querySelector('body');
 	});
@@ -16,17 +23,17 @@
 		<Tooltip.Trigger>
 			{#snippet child({ props })}
 				<Toggle
-					class="h-full w-full bg-secondary p-4 wrap-break-word whitespace-normal text-secondary-foreground"
+					class={`block h-full w-full truncate overflow-hidden bg-secondary p-2 text-xl wrap-break-word text-ellipsis whitespace-normal text-secondary-foreground ${calculateFontSize(name)}`}
 					{...props}
 					size="lg"
 				>
-					<span class="text-xl">{name}</span>
+					{name}
 				</Toggle>
 			{/snippet}
 		</Tooltip.Trigger>
 		{#if collisionBoundary}
 			<Tooltip.Content class="max-w-xs wrap-break-word whitespace-normal">
-				{description}
+				<span class="font-semibold">{name}:&nbsp;</span>{description}
 			</Tooltip.Content>
 		{/if}
 	</Tooltip.Root>
