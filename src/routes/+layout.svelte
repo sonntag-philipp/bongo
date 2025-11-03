@@ -16,7 +16,7 @@
 	<header class="p-4">
 		<h1 class="text-2xl font-bold">Bongo</h1>
 	</header>
-	<main class="h-full">
+	<main class="h-full p-4">
 		{@render children()}
 	</main>
 	<footer class="flex justify-evenly p-8">
