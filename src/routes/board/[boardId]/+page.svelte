@@ -4,9 +4,9 @@
 	let { data } = $props();
 </script>
 
-<div class="flex w-full items-center justify-center">
+<div class="flex h-full w-full items-center justify-center">
 	<div class="w-xl">
-		<div class="flex h-screen items-center justify-center">
+		<div class="flex items-center justify-center">
 			<div class="relative w-full">
 				<h1 class="w-full py-4 text-center text-3xl">{data.preset[0].name}</h1>
 				<div class="grid aspect-square grid-cols-4 grid-rows-4 gap-2">
