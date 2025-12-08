@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const { data: presetData, error: presetError } = await supabase
 		.from('presets')
-		.select('name')
+		.select('name, description')
 		.eq('id', presetId);
 
 	if (!presetData || presetData?.length <= 0) {

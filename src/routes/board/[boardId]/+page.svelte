@@ -11,9 +11,14 @@
 	<div class="w-2xl">
 		<div class="flex items-center justify-center">
 			<div class="relative w-full">
-				<h1 class="w-full py-4 text-center text-3xl">{data.preset[0].name}</h1>
+				<div class="flex flex-col gap-1 py-4">
+					<h1 class="text-3xl">{data.preset[0].name}</h1>
+					{#if data.preset[0].description}
+						<h2 class="text-sm">{data.preset[0].description}</h2>
+					{/if}
+				</div>
 				<div
-					class="grid aspect-square grid-cols-4 grid-rows-4 gap-2"
+					class="grid aspect-square gap-2"
 					style={`grid-template-columns: repeat(${gridSize}, 1fr); grid-template-rows: repeat(${gridSize}, 1fr);`}
 				>
 					{#each data.presetItems as presetItem}
