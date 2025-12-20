@@ -2,9 +2,6 @@
 	import GameToggle from '$lib/components/game-toggle.svelte';
 
 	let { data } = $props();
-
-	// Calculate the number of columns and rows
-	let gridSize = Math.ceil(Math.sqrt(data.presetItems.length));
 </script>
 
 <div class="flex h-full w-full items-center justify-center">
@@ -19,7 +16,7 @@
 				</div>
 				<div
 					class="grid aspect-square gap-2"
-					style={`grid-template-columns: repeat(${gridSize}, 1fr); grid-template-rows: repeat(${gridSize}, 1fr);`}
+					style={`grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);`}
 				>
 					{#each data.presetItems as presetItem}
 						<GameToggle description={presetItem.description} name={presetItem.name} />
