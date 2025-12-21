@@ -38,7 +38,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		.map(({ value }) => value);
 
 	return {
-		presetItems: shuffledPresets,
+		presetItems: shuffledPresets.slice(0, 25), // Because at most 25 items
 		preset: presetData
 	};
 };
