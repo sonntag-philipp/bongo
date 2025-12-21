@@ -1,5 +1,5 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
+	import favicon from '$lib/assets/favicon.png';
 	import DarkModeToggle from '$lib/components/dark-mode-toggle.svelte';
 	import CatIcon from '@lucide/svelte/icons/cat';
 	import { ModeWatcher } from 'mode-watcher';
