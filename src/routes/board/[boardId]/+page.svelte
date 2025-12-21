@@ -22,6 +22,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>{data.preset[0].name} - Bongo</title>
+</svelte:head>
+
 <div class="flex h-full w-full items-center justify-center">
 	<div class="w-2xl">
 		<div class="flex items-center justify-center">
