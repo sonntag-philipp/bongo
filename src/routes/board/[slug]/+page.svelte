@@ -52,8 +52,6 @@
 		try {
 			isRefreshing = true;
 			await refreshBoard();
-		} finally {
-			isRefreshing = false;
 
 			toast.success('Board has been refreshed', {
 				duration: 6000,
@@ -67,6 +65,8 @@
 					}
 				}
 			});
+		} finally {
+			isRefreshing = false;
 		}
 	};
 
@@ -148,10 +148,14 @@
 				{/if}
 			</div>
 			<div class="flex w-full py-8">
-				<Button disabled={isRefreshing} onclick={onRefreshButtonClicked} variant="destructive">
+				<Button
+					disabled={isRefreshing}
+					onclick={onRefreshButtonClicked}
+					variant="destructiveGhost"
+					class="text-md"
+				>
 					<RefreshCcwIcon class="h-5 min-h-5 w-5 min-w-5 {isRefreshing && 'animate-spin'}" />
-					<span>Refresh board</span>
-					<span class="sr-only">Refresh and reset current board</span>
+					<span>Get a fresh board</span>
 				</Button>
 			</div>
 		</div>

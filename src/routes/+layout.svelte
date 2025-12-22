@@ -13,8 +13,10 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<ModeWatcher />
-<Sonner />
+<div>
+	<ModeWatcher />
+	<Sonner />
+</div>
 
 <div class="flex h-lvh flex-col">
 	<header class="flex items-center justify-between p-4">
