@@ -40,9 +40,13 @@
 	});
 
 	const onRefreshButtonClicked = async () => {
+		if (isRefreshing) {
+			return;
+		}
+
 		try {
 			isRefreshing = true;
-			refreshBoard();
+			await refreshBoard();
 		} finally {
 			isRefreshing = false;
 		}
@@ -85,52 +89,56 @@
 
 <div class="flex h-full w-full items-center justify-center">
 	<div class="w-2xl">
-		<div class="flex items-center justify-center">
-			<div class="relative w-full">
-				<div class="flex flex-col gap-1 py-4">
-					<div class="flex items-center justify-between">
-						<h1 class="text-3xl">{boardPreset.name}</h1>
-						<Button
-							aria-label="Refresh and reset current board"
-							disabled={isRefreshing}
-							onclick={onRefreshButtonClicked}
-							variant="destructive"
-							size="icon"
-						>
-							<RefreshCcwIcon
-								class="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 {isRefreshing && 'animate-spin'}"
-							/>
-							<span class="sr-only">Toggle theme</span>
-						</Button>
-					</div>
-					{#if boardPreset.description}
-						<h2 class="text-sm">{boardPreset.description}</h2>
-					{/if}
-				</div>
-				<div
-					class="grid aspect-square gap-2"
-					style={`grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);`}
-				>
-					{#if isWide && boardPresetItems}
-						{#each boardPresetItems as presetItem}
-							<GameToggleDesktop
-								bind:pressed={
-									() => presetItem.pressed,
-									(v) => {
-										presetItem.pressed = v;
-										saveBoard();
-									}
+		<div class="flex flex-col justify-center">
+			<div class="flex flex-col gap-1 py-4">
+				<h1 class="text-3xl">{boardPreset.name}</h1>
+				{#if boardPreset.description}
+					<h2 class="text-sm">{boardPreset.description}</h2>
+				{/if}
+			</div>
+			<div
+				class="grid aspect-square gap-2"
+				style={`grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);`}
+			>
+				{#if isWide && boardPresetItems}
+					{#each boardPresetItems as presetItem}
+						<GameToggleDesktop
+							bind:pressed={
+								() => presetItem.pressed,
+								(v) => {
+									presetItem.pressed = v;
+									saveBoard();
 								}
-								description={presetItem.description}
-								name={presetItem.name}
-							/>
-						{/each}
-					{:else}
-						{#each boardPresetItems as presetItem}
-							<GameToggleMobile bind:pressed={presetItem.pressed} name={presetItem.name} />
-						{/each}
-					{/if}
-				</div>
+							}
+							description={presetItem.description}
+							name={presetItem.name}
+						/>
+					{/each}
+				{:else}
+					{#each boardPresetItems as presetItem}
+						<GameToggleMobile
+							bind:pressed={
+								() => presetItem.pressed,
+								(v) => {
+									presetItem.pressed = v;
+									saveBoard();
+								}
+							}
+							name={presetItem.name}
+						/>
+					{/each}
+				{/if}
+			</div>
+			<div class="flex w-full justify-center p-8">
+				<Button
+					disabled={isRefreshing}
+					onclick={onRefreshButtonClicked}
+					variant="destructive"
+					size="icon-2xl"
+				>
+					<RefreshCcwIcon class="h-6 min-h-6 w-6 min-w-6 {isRefreshing && 'animate-spin'}" />
+					<span class="sr-only">Refresh and reset current board</span>
+				</Button>
 			</div>
 		</div>
 	</div>
