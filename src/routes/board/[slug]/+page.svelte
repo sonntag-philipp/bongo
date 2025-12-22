@@ -2,23 +2,24 @@
 	import GameToggleDesktop from '$lib/components/game-toggle.desktop.svelte';
 	import GameToggleMobile from '$lib/components/game-toggle.mobile.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import type { Database } from '$lib/database.types.js';
 	import RefreshCcwIcon from '@lucide/svelte/icons/refresh-ccw';
+	import { onMount } from 'svelte';
+
+	type BoardItems =
+		| Array<Database['public']['Tables']['board_preset_items']['Row'] & { pressed: boolean }>
+		| undefined;
 
 	let { data } = $props();
 	let { boardPreset } = data;
 
-	import { onMount } from 'svelte';
+	const localStorageKey = `board-${boardPreset.id}`;
 
-	let boardPresetItems = $state(
-		data.boardPresetItems.map((item) => {
-			return { ...item, pressed: false };
-		})
-	);
-
+	let boardPresetItems = $state<BoardItems>(undefined);
 	let isWide = $state(false);
 	let isRefreshing = $state(false);
 
-	onMount(() => {
+	onMount(async () => {
 		const media = window.matchMedia('(min-width: 701px)');
 
 		const update = () => {
@@ -28,12 +29,26 @@
 		update(); // initial setzen
 		media.addEventListener('change', update);
 
-		return () => media.removeEventListener('change', update);
+		const storedBoard = localStorage.getItem(localStorageKey);
+		if (storedBoard) {
+			boardPresetItems = JSON.parse(storedBoard);
+		} else {
+			await refreshBoard();
+		}
+
+		return media.removeEventListener('change', update);
 	});
 
-	const onRefreshButtonClicked = async (event: Event) => {
-		isRefreshing = true;
+	const onRefreshButtonClicked = async () => {
+		try {
+			isRefreshing = true;
+			refreshBoard();
+		} finally {
+			isRefreshing = false;
+		}
+	};
 
+	const refreshBoard = async () => {
 		try {
 			const response = await fetch(`/api/board-preset-items?preset_id=${boardPreset.id}`, {
 				method: 'GET',
@@ -52,11 +67,15 @@
 			boardPresetItems = data.map((item: any) => {
 				return { ...item, pressed: false };
 			});
+			localStorage.setItem(localStorageKey, JSON.stringify(boardPresetItems));
 		} catch (error) {
 			console.error('Error fetching board preset items:', error);
-		} finally {
-			isRefreshing = false;
+			throw error;
 		}
+	};
+
+	const saveBoard = () => {
+		localStorage.setItem(localStorageKey, JSON.stringify(boardPresetItems));
 	};
 </script>
 
@@ -92,10 +111,16 @@
 					class="grid aspect-square gap-2"
 					style={`grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);`}
 				>
-					{#if isWide}
+					{#if isWide && boardPresetItems}
 						{#each boardPresetItems as presetItem}
 							<GameToggleDesktop
-								bind:pressed={presetItem.pressed}
+								bind:pressed={
+									() => presetItem.pressed,
+									(v) => {
+										presetItem.pressed = v;
+										saveBoard();
+									}
+								}
 								description={presetItem.description}
 								name={presetItem.name}
 							/>
