@@ -1,8 +1,86 @@
 INSERT INTO
-    "public"."presets" (
+    "auth"."users" (
+        "instance_id",
+        "id",
+        "aud",
+        "role",
+        "email",
+        "encrypted_password",
+        "email_confirmed_at",
+        "invited_at",
+        "confirmation_token",
+        "confirmation_sent_at",
+        "recovery_token",
+        "recovery_sent_at",
+        "email_change_token_new",
+        "email_change",
+        "email_change_sent_at",
+        "last_sign_in_at",
+        "raw_app_meta_data",
+        "raw_user_meta_data",
+        "is_super_admin",
+        "created_at",
+        "updated_at",
+        "phone",
+        "phone_confirmed_at",
+        "phone_change",
+        "phone_change_token",
+        "phone_change_sent_at",
+        "confirmed_at",
+        "email_change_token_current",
+        "email_change_confirm_status",
+        "banned_until",
+        "reauthentication_token",
+        "reauthentication_sent_at",
+        "is_sso_user",
+        "deleted_at",
+        "is_anonymous"
+    )
+VALUES
+    (
+        '00000000-0000-0000-0000-000000000000',
+        '24b86027-f418-48ba-b0b8-33c664b66faf',
+        'authenticated',
+        'authenticated',
+        'test@flyp.si',
+        '$2a$10$5UzbW1foLX45cMAtjRijUeZV0ADUqEaslEWZnKRY2jTqQK3xA4gu.',
+        '2025-12-22 02:15:54.496603+00',
+        null,
+        '',
+        null,
+        '',
+        null,
+        '',
+        '',
+        null,
+        null,
+        '{"provider":"email","providers":["email"]}',
+        '{"email_verified":true}',
+        null,
+        '2025-12-22 02:15:54.492534+00',
+        '2025-12-22 02:15:54.496861+00',
+        null,
+        null,
+        '',
+        '',
+        null,
+        default,
+        '',
+        '0',
+        null,
+        '',
+        null,
+        'false',
+        null,
+        'false'
+    );
+
+INSERT INTO
+    "public"."board_presets" (
         "id",
         "owner",
         "name",
+        "slug",
         "created_at",
         "deleted_at",
         "description"
@@ -10,23 +88,25 @@ INSERT INTO
 VALUES
     (
         '31ba03c3-3ac8-4e51-adc7-deaf5d9a8846',
-        '3bc0bcba-0d33-4b1c-9109-afc6b20e03cb',
+        '24b86027-f418-48ba-b0b8-33c664b66faf',
         'Moodi Foodi',
+        'moodi-foodi',
         '2025-11-02 23:18:28.278999+00',
         null,
-        null
+        'Das Ultimative Moodi Foodi Bingo Board für Moodi Begeisterte'
     ),
     (
         '5058bb1c-82b8-42fd-8c1e-15e123be496d',
-        '3bc0bcba-0d33-4b1c-9109-afc6b20e03cb',
+        '24b86027-f418-48ba-b0b8-33c664b66faf',
         'Friendly Fire',
+        'friendly-fire',
         '2025-12-06 14:34:38+00',
         null,
         null
     );
 
 INSERT INTO
-    "public"."preset_items" ("id", "preset_id", "name", "description")
+    "public"."board_preset_items" ("id", "preset_id", "name", "description")
 VALUES
     (
         '03873435-143b-4822-8dd1-8139f9e494f7',
@@ -124,6 +204,12 @@ VALUES
         '5058bb1c-82b8-42fd-8c1e-15e123be496d',
         '"unfassbare Summe"',
         null
+    ),
+    (
+        '58cc3d1c-e8b6-4296-aeb2-bd706a42cbd5',
+        '31ba03c3-3ac8-4e51-adc7-deaf5d9a8846',
+        'Reverse Handarbeit sein Vadder',
+        'Es wird einfach gefühlt nichts selbst gemacht. Die Dinge werden einfach genommen und aufgewärmt.'
     ),
     (
         '5a77c779-6797-447a-9c88-f1cae96e779c',
