@@ -3,7 +3,8 @@
 	import { Toggle } from './ui/toggle';
 	import * as Tooltip from './ui/tooltip';
 
-	let { name, description } = $props();
+	// Component props with Svelte Runes
+	let { name, description, pressed = $bindable(false) } = $props();
 	let collisionBoundary = $state<HTMLElement | null>(null);
 
 	onMount(() => {
@@ -19,6 +20,7 @@
 			{#snippet child({ props })}
 				<Toggle
 					class={`block h-full w-full truncate overflow-hidden bg-secondary p-2 text-xl wrap-break-word text-ellipsis whitespace-normal text-secondary-foreground`}
+					bind:pressed
 					{...props}
 					style="font-size: clamp(0.5rem, -0.1667rem + 2.6667vw, 1rem);"
 					size="lg"

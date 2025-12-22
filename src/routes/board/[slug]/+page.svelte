@@ -9,7 +9,12 @@
 
 	import { onMount } from 'svelte';
 
-	let boardPresetItems = $state(data.boardPresetItems);
+	let boardPresetItems = $state(
+		data.boardPresetItems.map((item) => {
+			return { ...item, pressed: false };
+		})
+	);
+
 	let isWide = $state(false);
 	let isRefreshing = $state(false);
 
@@ -42,10 +47,11 @@
 			}
 
 			const data = await response.json();
-			console.log('Fetched data:', data);
 
 			// Update the boardPresetItems with the new shuffled data
-			boardPresetItems = data;
+			boardPresetItems = data.map((item: any) => {
+				return { ...item, pressed: false };
+			});
 		} catch (error) {
 			console.error('Error fetching board preset items:', error);
 		} finally {
@@ -66,6 +72,7 @@
 					<div class="flex items-center justify-between">
 						<h1 class="text-3xl">{boardPreset.name}</h1>
 						<Button
+							aria-label="Refresh and reset current board"
 							disabled={isRefreshing}
 							onclick={onRefreshButtonClicked}
 							variant="destructive"
@@ -87,11 +94,15 @@
 				>
 					{#if isWide}
 						{#each boardPresetItems as presetItem}
-							<GameToggleDesktop description={presetItem.description} name={presetItem.name} />
+							<GameToggleDesktop
+								bind:pressed={presetItem.pressed}
+								description={presetItem.description}
+								name={presetItem.name}
+							/>
 						{/each}
 					{:else}
 						{#each boardPresetItems as presetItem}
-							<GameToggleMobile name={presetItem.name} />
+							<GameToggleMobile bind:pressed={presetItem.pressed} name={presetItem.name} />
 						{/each}
 					{/if}
 				</div>
