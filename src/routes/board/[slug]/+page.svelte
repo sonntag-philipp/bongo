@@ -5,6 +5,7 @@
 	import type { Database } from '$lib/database.types.js';
 	import RefreshCcwIcon from '@lucide/svelte/icons/refresh-ccw';
 	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
 
 	type BoardItems =
 		| Array<Database['public']['Tables']['board_preset_items']['Row'] & { pressed: boolean }>
@@ -44,11 +45,28 @@
 			return;
 		}
 
+		// Create snapshot of the old board so it can be reset using the
+		// undo button of the toast
+		const boardPresetItemsSnapshot = boardPresetItems;
+
 		try {
 			isRefreshing = true;
 			await refreshBoard();
 		} finally {
 			isRefreshing = false;
+
+			toast.success('Board has been refreshed', {
+				duration: 6000,
+				description: 'Click Undo to revert changes',
+				position: 'top-center',
+				action: {
+					label: 'Undo',
+					onClick: () => {
+						boardPresetItems = boardPresetItemsSnapshot;
+						localStorage.setItem(localStorageKey, JSON.stringify(boardPresetItems));
+					}
+				}
+			});
 		}
 	};
 

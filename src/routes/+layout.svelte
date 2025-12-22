@@ -1,6 +1,7 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.png';
 	import DarkModeToggle from '$lib/components/dark-mode-toggle.svelte';
+	import Sonner from '$lib/components/ui/sonner/sonner.svelte';
 	import CatIcon from '@lucide/svelte/icons/cat';
 	import { ModeWatcher } from 'mode-watcher';
 	import '../app.css';
@@ -13,6 +14,8 @@
 </svelte:head>
 
 <ModeWatcher />
+<Sonner />
+
 <div class="flex h-lvh flex-col">
 	<header class="flex items-center justify-between p-4">
 		<a class="flex items-center gap-4" href="/">
