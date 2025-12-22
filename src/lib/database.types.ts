@@ -34,7 +34,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      preset_items: {
+      board_preset_items: {
         Row: {
           description: string | null
           id: string
@@ -58,12 +58,12 @@ export type Database = {
             foreignKeyName: "preset_items_preset_id_fkey"
             columns: ["preset_id"]
             isOneToOne: false
-            referencedRelation: "presets"
+            referencedRelation: "board_presets"
             referencedColumns: ["id"]
           },
         ]
       }
-      presets: {
+      board_presets: {
         Row: {
           created_at: string
           deleted_at: string | null
@@ -71,6 +71,7 @@ export type Database = {
           id: string
           name: string
           owner: string
+          slug: string
         }
         Insert: {
           created_at?: string
@@ -79,6 +80,7 @@ export type Database = {
           id?: string
           name: string
           owner: string
+          slug?: string
         }
         Update: {
           created_at?: string
@@ -87,6 +89,7 @@ export type Database = {
           id?: string
           name?: string
           owner?: string
+          slug?: string
         }
         Relationships: []
       }
