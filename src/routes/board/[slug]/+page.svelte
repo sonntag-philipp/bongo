@@ -129,14 +129,10 @@
 					{/each}
 				{/if}
 			</div>
-			<div class="flex w-full justify-center p-8">
-				<Button
-					disabled={isRefreshing}
-					onclick={onRefreshButtonClicked}
-					variant="destructive"
-					size="icon-2xl"
-				>
-					<RefreshCcwIcon class="h-6 min-h-6 w-6 min-w-6 {isRefreshing && 'animate-spin'}" />
+			<div class="flex w-full py-8">
+				<Button disabled={isRefreshing} onclick={onRefreshButtonClicked} variant="destructive">
+					<RefreshCcwIcon class="h-5 min-h-5 w-5 min-w-5 {isRefreshing && 'animate-spin'}" />
+					<span>Refresh board</span>
 					<span class="sr-only">Refresh and reset current board</span>
 				</Button>
 			</div>
