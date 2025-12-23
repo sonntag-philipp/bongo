@@ -30,11 +30,13 @@
 	<main class="h-full p-4">
 		{@render children()}
 	</main>
-	<footer class="flex justify-center py-4">
-		<span class="flex w-full flex-col items-center justify-center text-xs">
+	<footer
+		class="flex justify-center bg-linear-to-r from-slate-700 via-cyan-900 to-green-800 py-4 text-gray-200 dark:from-slate-700/50 dark:via-cyan-900/50 dark:to-green-800/50"
+	>
+		<span class="flex w-full flex-col items-center justify-center text-sm">
 			<span>
 				Made by <a class="underline" href="https://flyp.si">flyp.si</a> using SvelteKit, Supabase and
-				ShadCN
+				Shadcn
 			</span>
 		</span>
 	</footer>
