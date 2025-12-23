@@ -18,26 +18,29 @@
 	<Sonner />
 </div>
 
-<div class="flex h-lvh flex-col">
-	<header class="flex items-center justify-between p-4">
-		<a class="flex items-center gap-4" href="/">
-			<CatIcon class="aspect-square h-10 w-10" />
-			<h1 class="text-2xl font-bold">Bongo</h1>
-		</a>
+<header class="flex items-center justify-between p-4">
+	<a class="flex items-center gap-4" href="/">
+		<CatIcon class="aspect-square h-10 w-10" />
+		<h1 class="text-2xl font-bold">Bongo</h1>
+	</a>
 
-		<DarkModeToggle />
-	</header>
-	<main class="h-full p-4">
-		{@render children()}
-	</main>
-	<footer
-		class="flex justify-center bg-linear-to-r from-slate-700 via-cyan-900 to-green-800 py-4 text-gray-200 dark:from-slate-700/50 dark:via-cyan-900/50 dark:to-green-800/50"
-	>
-		<span class="flex w-full flex-col items-center justify-center text-sm">
-			<span>
-				Made by <a class="underline" href="https://flyp.si">flyp.si</a> using SvelteKit, Supabase and
-				Shadcn
-			</span>
+	<DarkModeToggle />
+</header>
+
+<main class="grow p-4">
+	{@render children()}
+</main>
+
+<footer
+	class="flex justify-center bg-linear-to-r from-slate-700 via-cyan-900 to-green-800 py-4 text-gray-200 dark:from-slate-700/50 dark:via-cyan-900/50 dark:to-green-800/50"
+>
+	<div class="flex w-full items-center justify-center gap-4 text-sm">
+		<span>
+			<a class="hover:underline" href="https://flyp.si">flyp.si</a>
 		</span>
-	</footer>
-</div>
+		<span> - </span>
+		<span>
+			<a class="hover:underline" href="https://flyp.si/legal">Legal</a>
+		</span>
+	</div>
+</footer>

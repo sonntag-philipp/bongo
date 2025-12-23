@@ -106,7 +106,7 @@
 </svelte:head>
 
 <div class="flex h-full w-full items-center justify-center">
-	<div class="w-2xl">
+	<div class="md:w-2xl">
 		<div class="flex flex-col justify-center">
 			<div class="flex flex-col gap-1 py-4">
 				<h1 class="text-3xl">{boardPreset.name}</h1>
@@ -148,14 +148,9 @@
 				{/if}
 			</div>
 			<div class="flex w-full py-8">
-				<Button
-					disabled={isRefreshing}
-					onclick={onRefreshButtonClicked}
-					variant="destructiveGhost"
-					class="text-md"
-				>
-					<RefreshCcwIcon class="h-5 min-h-5 w-5 min-w-5 {isRefreshing && 'animate-spin'}" />
-					<span>Get a fresh board</span>
+				<Button disabled={isRefreshing} onclick={onRefreshButtonClicked} variant="destructiveGhost">
+					<RefreshCcwIcon class="h- min-h- w- min-w- {isRefreshing && 'animate-spin'}" />
+					<span>Refresh board</span>
 				</Button>
 			</div>
 		</div>
