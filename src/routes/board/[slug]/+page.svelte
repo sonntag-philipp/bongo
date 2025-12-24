@@ -1,6 +1,5 @@
 <script lang="ts">
-	import GameToggleDesktop from '$lib/components/game-toggle.desktop.svelte';
-	import GameToggleMobile from '$lib/components/game-toggle.mobile.svelte';
+	import GameToggle from '$lib/components/game-toggle.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { Database } from '$lib/database.types.js';
 	import RefreshCcwIcon from '@lucide/svelte/icons/refresh-ccw';
@@ -17,30 +16,19 @@
 	const localStorageKey = `board-${boardPreset.id}`;
 
 	let boardPresetItems = $state<BoardItems>(undefined);
-	let isWide = $state(false);
 	let isRefreshing = $state(false);
 
 	onMount(async () => {
-		const media = window.matchMedia('(min-width: 701px)');
-
-		const update = () => {
-			isWide = media.matches;
-		};
-
-		update(); // initial setzen
-		media.addEventListener('change', update);
-
 		const storedBoard = localStorage.getItem(localStorageKey);
+
 		if (storedBoard) {
 			boardPresetItems = JSON.parse(storedBoard);
 		} else {
 			await refreshBoard();
 		}
-
-		return media.removeEventListener('change', update);
 	});
 
-	const onRefreshButtonClicked = async () => {
+	async function onRefreshButtonClicked() {
 		if (isRefreshing) {
 			return;
 		}
@@ -68,9 +56,9 @@
 		} finally {
 			isRefreshing = false;
 		}
-	};
+	}
 
-	const refreshBoard = async () => {
+	async function refreshBoard() {
 		try {
 			const response = await fetch(`/api/board-preset-items?preset_id=${boardPreset.id}`, {
 				method: 'GET',
@@ -94,11 +82,11 @@
 			console.error('Error fetching board preset items:', error);
 			throw error;
 		}
-	};
+	}
 
-	const saveBoard = () => {
+	async function saveBoard() {
 		localStorage.setItem(localStorageKey, JSON.stringify(boardPresetItems));
-	};
+	}
 </script>
 
 <svelte:head>
@@ -118,9 +106,9 @@
 				class="grid aspect-square gap-2"
 				style={`grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);`}
 			>
-				{#if isWide && boardPresetItems}
+				{#if boardPresetItems}
 					{#each boardPresetItems as presetItem}
-						<GameToggleDesktop
+						<GameToggle
 							bind:pressed={
 								() => presetItem.pressed,
 								(v) => {
@@ -133,18 +121,7 @@
 						/>
 					{/each}
 				{:else}
-					{#each boardPresetItems as presetItem}
-						<GameToggleMobile
-							bind:pressed={
-								() => presetItem.pressed,
-								(v) => {
-									presetItem.pressed = v;
-									saveBoard();
-								}
-							}
-							name={presetItem.name}
-						/>
-					{/each}
+					<h1>Loading Items</h1>
 				{/if}
 			</div>
 			<div class="flex w-full py-8">

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.png';
 	import DarkModeToggle from '$lib/components/dark-mode-toggle.svelte';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import Sonner from '$lib/components/ui/sonner/sonner.svelte';
 	import CatIcon from '@lucide/svelte/icons/cat';
 	import { ModeWatcher } from 'mode-watcher';
@@ -38,7 +39,7 @@
 		<span>
 			<a class="hover:underline" href="https://flyp.si">flyp.si</a>
 		</span>
-		<span> - </span>
+		<Separator orientation="vertical" />
 		<span>
 			<a class="hover:underline" href="https://flyp.si/legal">Legal</a>
 		</span>

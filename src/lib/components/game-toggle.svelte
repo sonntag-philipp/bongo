@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Toggle } from './ui/toggle';
 	import * as Tooltip from './ui/tooltip';
 
 	// Component props with Svelte Runes
 	let { name, description, pressed = $bindable(false) } = $props();
-	let collisionBoundary = $state<HTMLElement | null>(null);
 
-	onMount(() => {
-		collisionBoundary = document.querySelector('body');
-	});
+	const canUseHoverTooltips =
+		window.matchMedia('(hover: hover)').matches && window.matchMedia('(pointer: fine)').matches;
 
 	// clamp() generator: https://clamp.font-size.app/?config=eyJyb290IjoiMTYiLCJtaW5XaWR0aCI6IjQwMHB4IiwibWF4V2lkdGgiOiI3MDBweCIsIm1pbkZvbnRTaXplIjoiOHB4IiwibWF4Rm9udFNpemUiOiIxNnB4In0%3D
 </script>
@@ -29,10 +26,12 @@
 				</Toggle>
 			{/snippet}
 		</Tooltip.Trigger>
-		{#if collisionBoundary}
-			<Tooltip.Content class="hidden max-w-xs wrap-break-word whitespace-normal md:block">
+		<Tooltip.Content class="hidden max-w-xs wrap-break-word whitespace-normal md:block">
+			{#if !description}
+				{name}
+			{:else}
 				<span class="font-semibold">{name}:&nbsp;</span>{description}
-			</Tooltip.Content>
-		{/if}
+			{/if}
+		</Tooltip.Content>
 	</Tooltip.Root>
 </Tooltip.Provider>
