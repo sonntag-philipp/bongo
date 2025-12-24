@@ -1,28 +1,25 @@
 <script lang="ts">
 	import GameToggle from '$lib/components/game-toggle.svelte';
+	import { checkBingo } from '$lib/components/game/bingo-checker.js';
+	import type { BoardItem } from '$lib/components/game/types.js';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import type { Database } from '$lib/database.types.js';
 	import RefreshCcwIcon from '@lucide/svelte/icons/refresh-ccw';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
-
-	type BoardItems =
-		| Array<Database['public']['Tables']['board_preset_items']['Row'] & { pressed: boolean }>
-		| undefined;
 
 	let { data } = $props();
 	let { boardPreset } = data;
 
 	const localStorageKey = `board-${boardPreset.id}`;
 
-	let boardPresetItems = $state<BoardItems>(undefined);
+	let boardItems = $state<Array<BoardItem> | undefined>(undefined);
 	let isRefreshing = $state(false);
 
 	onMount(async () => {
 		const storedBoard = localStorage.getItem(localStorageKey);
 
 		if (storedBoard) {
-			boardPresetItems = JSON.parse(storedBoard);
+			boardItems = JSON.parse(storedBoard);
 		} else {
 			await refreshBoard();
 		}
@@ -35,7 +32,7 @@
 
 		// Create snapshot of the old board so it can be reset using the
 		// undo button of the toast
-		const boardPresetItemsSnapshot = boardPresetItems;
+		const boardPresetItemsSnapshot = boardItems;
 
 		try {
 			isRefreshing = true;
@@ -47,8 +44,8 @@
 				action: {
 					label: 'Undo',
 					onClick: () => {
-						boardPresetItems = boardPresetItemsSnapshot;
-						localStorage.setItem(localStorageKey, JSON.stringify(boardPresetItems));
+						boardItems = boardPresetItemsSnapshot;
+						localStorage.setItem(localStorageKey, JSON.stringify(boardItems));
 					}
 				}
 			});
@@ -73,10 +70,10 @@
 			const data = await response.json();
 
 			// Update the boardPresetItems with the new shuffled data
-			boardPresetItems = data.map((item: any) => {
+			boardItems = data.map((item: any) => {
 				return { ...item, pressed: false };
 			});
-			localStorage.setItem(localStorageKey, JSON.stringify(boardPresetItems));
+			localStorage.setItem(localStorageKey, JSON.stringify(boardItems));
 		} catch (error) {
 			console.error('Error fetching board preset items:', error);
 			throw error;
@@ -84,7 +81,7 @@
 	}
 
 	async function saveBoard() {
-		localStorage.setItem(localStorageKey, JSON.stringify(boardPresetItems));
+		localStorage.setItem(localStorageKey, JSON.stringify(boardItems));
 	}
 </script>
 
@@ -100,18 +97,20 @@
 		{/if}
 	</div>
 	<div class="grid aspect-square grid-cols-5 grid-rows-5 gap-2">
-		{#if boardPresetItems}
-			{#each boardPresetItems as presetItem}
+		{#if boardItems}
+			{#each boardItems as boardItem}
 				<GameToggle
 					bind:pressed={
-						() => presetItem.pressed,
+						() => boardItem.pressed,
 						(v) => {
-							presetItem.pressed = v;
+							boardItem.pressed = v;
+							// Must not be undefined as we only display this ui when boardItems is defined, so we expect the definition here
+							console.log(checkBingo(boardItems!));
 							saveBoard();
 						}
 					}
-					description={presetItem.description}
-					name={presetItem.name}
+					description={boardItem.description}
+					name={boardItem.name}
 				/>
 			{/each}
 		{/if}
