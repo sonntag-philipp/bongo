@@ -1,6 +1,6 @@
 import type { BoardItem } from './types';
 
-export function checkBingo(boardItems: BoardItem[]) {
+export function checkBingo(boardItems: BoardItem[] | undefined) {
 	if (!boardItems) {
 		throw new Error('Unable to check for bingo. Board items are undefined.');
 	}

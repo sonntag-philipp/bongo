@@ -4,6 +4,7 @@
 	import type { BoardItem } from '$lib/components/game/types.js';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import RefreshCcwIcon from '@lucide/svelte/icons/refresh-ccw';
+	import confetti from 'canvas-confetti';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
@@ -83,6 +84,39 @@
 	async function saveBoard() {
 		localStorage.setItem(localStorageKey, JSON.stringify(boardItems));
 	}
+
+	async function showWinAnimation() {
+		var duration = 15 * 1000;
+		var animationEnd = Date.now() + duration;
+		var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+		function randomInRange(min: number, max: number) {
+			return Math.random() * (max - min) + min;
+		}
+
+		var interval = setInterval(function () {
+			var timeLeft = animationEnd - Date.now();
+
+			if (timeLeft <= 0) {
+				return clearInterval(interval);
+			}
+
+			var particleCount = 320 * (timeLeft / duration);
+			// since particles fall down, start a bit higher than random
+			confetti({
+				...defaults,
+				particleCount,
+				origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+				disableForReducedMotion: true
+			});
+			confetti({
+				...defaults,
+				particleCount,
+				origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+				disableForReducedMotion: true
+			});
+		}, 500);
+	}
 </script>
 
 <svelte:head>
@@ -104,9 +138,11 @@
 						() => boardItem.pressed,
 						(v) => {
 							boardItem.pressed = v;
-							// Must not be undefined as we only display this ui when boardItems is defined, so we expect the definition here
-							console.log(checkBingo(boardItems!));
 							saveBoard();
+
+							if (checkBingo(boardItems)) {
+								showWinAnimation();
+							}
 						}
 					}
 					description={boardItem.description}
@@ -117,7 +153,7 @@
 	</div>
 	<div class="flex w-full py-8">
 		<Button disabled={isRefreshing} onclick={onRefreshButtonClicked} variant="destructiveGhost">
-			<RefreshCcwIcon class="h- min-h- w- min-w- {isRefreshing && 'animate-spin'}" />
+			<RefreshCcwIcon class="h-5 w-5 {isRefreshing && 'animate-spin'}" />
 			<span>Refresh board</span>
 		</Button>
 	</div>
