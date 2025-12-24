@@ -19,7 +19,7 @@
 	<Sonner />
 </div>
 
-<header class="flex items-center justify-between p-4">
+<header class="flex items-center justify-between p-3">
 	<a class="flex items-center gap-4" href="/">
 		<CatIcon class="aspect-square h-10 w-10" />
 		<h1 class="text-2xl font-bold">Bongo</h1>
@@ -28,8 +28,10 @@
 	<DarkModeToggle />
 </header>
 
-<main class="grow p-4">
-	{@render children()}
+<main class="flex grow justify-center">
+	<div class="px-3 md:w-2xl">
+		{@render children()}
+	</div>
 </main>
 
 <footer

@@ -41,9 +41,8 @@
 			isRefreshing = true;
 			await refreshBoard();
 
-			toast.success('Board has been refreshed', {
+			toast.success('New board has been generated', {
 				duration: 6000,
-				description: 'Click Undo to revert changes',
 				position: 'top-center',
 				action: {
 					label: 'Undo',
@@ -68,7 +67,7 @@
 			});
 
 			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
+				throw new Error(`HTTP error status: ${response.status}`);
 			}
 
 			const data = await response.json();
@@ -93,43 +92,34 @@
 	<title>{boardPreset.name} - Bongo</title>
 </svelte:head>
 
-<div class="flex h-full w-full items-center justify-center">
-	<div class="md:w-2xl">
-		<div class="flex flex-col justify-center">
-			<div class="flex flex-col gap-1 py-4">
-				<h1 class="text-3xl">{boardPreset.name}</h1>
-				{#if boardPreset.description}
-					<h2 class="text-sm">{boardPreset.description}</h2>
-				{/if}
-			</div>
-			<div
-				class="grid aspect-square gap-2"
-				style={`grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);`}
-			>
-				{#if boardPresetItems}
-					{#each boardPresetItems as presetItem}
-						<GameToggle
-							bind:pressed={
-								() => presetItem.pressed,
-								(v) => {
-									presetItem.pressed = v;
-									saveBoard();
-								}
-							}
-							description={presetItem.description}
-							name={presetItem.name}
-						/>
-					{/each}
-				{:else}
-					<h1>Loading Items</h1>
-				{/if}
-			</div>
-			<div class="flex w-full py-8">
-				<Button disabled={isRefreshing} onclick={onRefreshButtonClicked} variant="destructiveGhost">
-					<RefreshCcwIcon class="h- min-h- w- min-w- {isRefreshing && 'animate-spin'}" />
-					<span>Refresh board</span>
-				</Button>
-			</div>
-		</div>
+<div class="flex flex-col justify-center">
+	<div class="flex flex-col gap-1 py-4">
+		<h1 class="text-3xl">{boardPreset.name}</h1>
+		{#if boardPreset.description}
+			<h2 class="text-sm">{boardPreset.description}</h2>
+		{/if}
+	</div>
+	<div class="grid aspect-square grid-cols-5 grid-rows-5 gap-2">
+		{#if boardPresetItems}
+			{#each boardPresetItems as presetItem}
+				<GameToggle
+					bind:pressed={
+						() => presetItem.pressed,
+						(v) => {
+							presetItem.pressed = v;
+							saveBoard();
+						}
+					}
+					description={presetItem.description}
+					name={presetItem.name}
+				/>
+			{/each}
+		{/if}
+	</div>
+	<div class="flex w-full py-8">
+		<Button disabled={isRefreshing} onclick={onRefreshButtonClicked} variant="destructiveGhost">
+			<RefreshCcwIcon class="h- min-h- w- min-w- {isRefreshing && 'animate-spin'}" />
+			<span>Refresh board</span>
+		</Button>
 	</div>
 </div>
